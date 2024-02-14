@@ -12,34 +12,60 @@ var server = http.createServer(app);
 var io = require("socket.io")(server);
 
 // middle ware
+//changes all the data that comes from the frontend to json format to process with the backend
 app.use(express.json());
 
 // connect to mongodb
-const DB =
-  "mongodb+srv://rivaan:rivaan123@cluster0.wjz68.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
+// const DB =
+//   "mongodb+srv://rivaan:rivaan123@cluster0.wjz68.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  const DB="mongodb+srv://naolaa:test1234@cluster0.tuaxxrf.mongodb.net/?retryWrites=true&w=majority";
 // listening to socket io events from the client (flutter code)
-io.on("connection", (socket) => {
-  socket.on("create-game", async ({ nickname }) => {
-    try {
-      let game = new Game();
-      const sentence = await getSentence();
-      game.words = sentence;
-      let player = {
+io.on("connection",(socket)=>{
+// console.log(socket.id);
+socket.on('create-game',async ({nickname})=>{
+  try{
+ let game=new Game();
+ const sentence=await getSentence();
+ game.words=sentence;
+       let player = {
         socketID: socket.id,
         nickname,
         isPartyLeader: true,
       };
       game.players.push(player);
       game = await game.save();
-
       const gameId = game._id.toString();
       socket.join(gameId);
       io.to(gameId).emit("updateGame", game);
-    } catch (e) {
-      console.log(e);
-    }
-  });
+
+  }catch(e){
+    console.log(e);
+  }
+})
+});
+
+// io.on("connection", (socket) => {
+//   socket.on("create-game", async ({ nickname }) => {
+//     try {
+//       let game = new Game();
+//       const sentence = await getSentence();
+//       game.words = sentence;
+//       let player = {
+//         socketID: socket.id,
+//         nickname,
+//         isPartyLeader: true,
+//       };
+//       game.players.push(player);
+//       game = await game.save();
+
+//       const gameId = game._id.toString();
+//       socket.join(gameId);
+//       io.to(gameId).emit("updateGame", game);
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   });
 
   socket.on("join-game", async ({ nickname, gameId }) => {
     try {

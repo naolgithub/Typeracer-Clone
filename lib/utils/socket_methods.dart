@@ -37,6 +37,7 @@ class SocketMethods {
   // listeners
   updateGameListener(BuildContext context) {
     _socketClient.on('updateGame', (data) {
+      // print(data);
       final gameStateProvider =
           Provider.of<GameStateProvider>(context, listen: false)
               .updateGameState(

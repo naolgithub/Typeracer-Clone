@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:typeracer_clone/utils/socket_client.dart';
 
 import '../utils/socket_methods.dart';
 import '../widgets/custom_button.dart';
@@ -15,14 +14,6 @@ class CreateRoomScreen extends StatefulWidget {
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final TextEditingController _nameController = TextEditingController();
   final SocketMethods _socketMethods = SocketMethods();
-  //testing
-  final SocketClient _socketClient = SocketClient.instance;
-  //testing begin
-  testing() {
-    _socketClient.socket!.emit('test', 'This is working! ');
-  }
-
-//testing done
   @override
   void initState() {
     super.initState();
@@ -72,10 +63,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                 ),
                 CustomButton(
                   text: 'Create',
-                  // onTap: () => _socketMethods.createGame(
-                  //   _nameController.text,
-                  // ),
-                  onTap: testing,
+                  onTap: () => _socketMethods.createGame(
+                    _nameController.text,
+                  ),
                 ),
               ],
             ),
